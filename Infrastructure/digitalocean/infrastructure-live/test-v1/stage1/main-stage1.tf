@@ -33,8 +33,8 @@ provider "digitalocean" {
 #
 
 resource "digitalocean_project" "this" {
-  name        = "infra-test-v1" #Edit
-  description = "infra-test-v1" #Edit
+  name        = "infra-demo-v1" #Edit
+  description = "infra-demo-v1" #Edit
   purpose     = "Web Application"
   environment = "Development"
 }
