@@ -1,0 +1,19 @@
+name: CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+    
+  workflow_dispatch:
+
+jobs:
+  provision_infra:
+    runs-on: andygolubev/cli-tool
+    steps:
+      - uses: actions/checkout@v3
+      - name: Deploy
+        run: |
+          terraform --version
+          echo test
