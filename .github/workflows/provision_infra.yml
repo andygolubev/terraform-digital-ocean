@@ -14,6 +14,13 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Deploy
+        env: # Or as an environment variable
+          credentials: ${{ secrets.AZURE_CREDENTIALS }}
+        with:
+          do_token: ${{secrets.DO_API_TOKEN }}
+          do_bucket_key: ${{ secrets.DO_BUCKET_ACCESS_KEY }}
+          do_bucket_secret: ${{ secrets.DO_BUCKET_SECRET_KEY }}
+
         run: |
           terraform --version
           echo test
