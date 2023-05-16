@@ -26,6 +26,9 @@ jobs:
           DO_BUCKET_SECRET_KEY: ${{ secrets.DO_BUCKET_SECRET_KEY }}
         run: |
           terraform --version
-          terraform -chdir=$PATH_STAGE_1 init -var="digital_ocean_api_token=${{ secrets.DO_API_TOKEN }}" -backend-config="access_key=${{ secrets.DO_BUCKET_ACCESS_KEY }}" -backend-config="secret_key=${{ secrets.DO_BUCKET_SECRET_KEY }}"
-          terraform -chdir=$PATH_STAGE_1 plan -var="digital_ocean_api_token=${{ secrets.DO_API_TOKEN }}"
-          terraform -chdir=$PATH_STAGE_1 apply -var="digital_ocean_api_token=${{ secrets.DO_API_TOKEN }}" --auto-approve
+          terraform -chdir=$PATH_STAGE_1 init -var="digital_ocean_api_token=$DO_API_TOKEN" -backend-config="access_key=$DO_BUCKET_ACCESS_KEY" -backend-config="secret_key=$DO_BUCKET_SECRET_KEY"
+          terraform -chdir=$PATH_STAGE_1 plan -var="digital_ocean_api_token=$DO_API_TOKEN"
+          terraform -chdir=$PATH_STAGE_1 apply -var="digital_ocean_api_token=$DO_API_TOKEN" --auto-approve
+          terraform -chdir=$PATH_STAGE_2 init -var="digital_ocean_api_token=$DO_API_TOKEN" -backend-config="access_key=$DO_BUCKET_ACCESS_KEY" -backend-config="secret_key=$DO_BUCKET_SECRET_KEY"
+          terraform -chdir=$PATH_STAGE_2 plan -var="digital_ocean_api_token=$DO_API_TOKEN" -var="k8s_cluster_name=$(cd $PATH_STAGE_1 && terraform output -raw k8s_cluster_name)"
+          terraform -chdir=$PATH_STAGE_2 apply -var="digital_ocean_api_token=$DO_API_TOKEN" --auto-approve -var="k8s_cluster_name=$(cd $PATH_STAGE_1 && terraform output -raw k8s_cluster_name)"
