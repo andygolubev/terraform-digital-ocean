@@ -12,16 +12,15 @@ jobs:
   provision_infra:
     runs-on: self-hosted
     steps:
-      - name: Provision infra
+      - name: Checkout
         uses: actions/checkout@v3
+
+      - name: Provision infra
         with:
           do_token: ${{secrets.DO_API_TOKEN }}
           do_bucket_key: ${{ secrets.DO_BUCKET_ACCESS_KEY }}
           do_bucket_secret: ${{ secrets.DO_BUCKET_SECRET_KEY }}
-
         run: |
           terraform --version
-          echo test
-          env
           terraform -chdir="./Infrastructure/digitalocean/infrastructure-live/test-v1/stage1/" init -var="digital_ocean_api_token=${{ secrets.DO_API_TOKEN }} -backend-config="access_key=${{ secrets.DO_BUCKET_ACCESS_KEY }}" -backend-config="secret_key=${{ secrets.DO_BUCKET_SECRET_KEY }}"
           terraform -chdir="./Infrastructure/digitalocean/infrastructure-live/test-v1/stage1/" plan -var="digital_ocean_api_token=${{ secrets.DO_API_TOKEN }}
