@@ -1,4 +1,4 @@
-name: CI
+name: Provision
 
 on:
   push:
@@ -13,22 +13,43 @@ env:
   PATH_STAGE_2: "./Infrastructure/digitalocean/infrastructure-live/test-v1/stage2/"
 
 jobs:
-  provision_infra:
+  provision:
+    name: Provision the infrastructure in Digital Ocean and configure Kubernetes
     runs-on: self-hosted
     steps:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Provision infra
+      - name: Provision the infrastructure
         env:
           DO_API_TOKEN: ${{secrets.DO_API_TOKEN }}
           DO_BUCKET_ACCESS_KEY: ${{ secrets.DO_BUCKET_ACCESS_KEY }}
           DO_BUCKET_SECRET_KEY: ${{ secrets.DO_BUCKET_SECRET_KEY }}
         run: |
-          terraform --version
           terraform -chdir=$PATH_STAGE_1 init -var="digital_ocean_api_token=$DO_API_TOKEN" -backend-config="access_key=$DO_BUCKET_ACCESS_KEY" -backend-config="secret_key=$DO_BUCKET_SECRET_KEY"
           terraform -chdir=$PATH_STAGE_1 plan -var="digital_ocean_api_token=$DO_API_TOKEN"
           terraform -chdir=$PATH_STAGE_1 apply -var="digital_ocean_api_token=$DO_API_TOKEN" --auto-approve
           terraform -chdir=$PATH_STAGE_2 init -var="digital_ocean_api_token=$DO_API_TOKEN" -backend-config="access_key=$DO_BUCKET_ACCESS_KEY" -backend-config="secret_key=$DO_BUCKET_SECRET_KEY"
           terraform -chdir=$PATH_STAGE_2 plan -var="digital_ocean_api_token=$DO_API_TOKEN" -var="k8s_cluster_name=$(cd $PATH_STAGE_1 && terraform output -raw k8s_cluster_name)"
           terraform -chdir=$PATH_STAGE_2 apply -var="digital_ocean_api_token=$DO_API_TOKEN" --auto-approve -var="k8s_cluster_name=$(cd $PATH_STAGE_1 && terraform output -raw k8s_cluster_name)"
+  
+  destroy:
+    name: Destroy the infrastructure in Digital Ocean
+    runs-on: self-hosted
+    steps:
+      - name: Checkout
+        if: always()
+        uses: actions/checkout@v3
+
+      - name: Destroy the infrastructure
+        env:
+          DO_API_TOKEN: ${{secrets.DO_API_TOKEN }}
+          DO_BUCKET_ACCESS_KEY: ${{ secrets.DO_BUCKET_ACCESS_KEY }}
+          DO_BUCKET_SECRET_KEY: ${{ secrets.DO_BUCKET_SECRET_KEY }}
+        run: |
+          terraform -chdir=$PATH_STAGE_1 init -var="digital_ocean_api_token=$DO_API_TOKEN" -backend-config="access_key=$DO_BUCKET_ACCESS_KEY" -backend-config="secret_key=$DO_BUCKET_SECRET_KEY";
+          doctl auth init --access-token $DO_API_TOKEN;
+          doctl kubernetes cluster kubeconfig save $(terraform -chdir=$PATH_STAGE_1  output -raw  k8s_cluster_name);
+          terraform -chdir=$PATH_STAGE_2 init -var="digital_ocean_api_token=$DO_API_TOKEN" -backend-config="access_key=$DO_BUCKET_ACCESS_KEY" -backend-config="secret_key=$DO_BUCKET_SECRET_KEY";
+          terraform -chdir=$PATH_STAGE_2 apply -destroy -var="digital_ocean_api_token=$DO_API_TOKEN" --auto-approve -var="k8s_cluster_name=$(cd $PATH_STAGE_1 && terraform output -raw k8s_cluster_name)";
+          terraform -chdir=$PATH_STAGE_1 apply -destroy -var="digital_ocean_api_token=$DO_API_TOKEN" --auto-approve;
