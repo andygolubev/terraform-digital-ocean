@@ -22,5 +22,5 @@ jobs:
           DO_BUCKET_SECRET_KEY: ${{ secrets.DO_BUCKET_SECRET_KEY }}
         run: |
           terraform --version
-          terraform -chdir="./Infrastructure/digitalocean/infrastructure-live/test-v1/stage1/" init -var="digital_ocean_api_token=${{ secrets.DO_API_TOKEN }} -backend-config="access_key=${{ secrets.DO_BUCKET_ACCESS_KEY }}" -backend-config="secret_key=${{ secrets.DO_BUCKET_SECRET_KEY }}"
+          terraform -chdir="./Infrastructure/digitalocean/infrastructure-live/test-v1/stage1/" init -var="digital_ocean_api_token=${{ secrets.DO_API_TOKEN }}" -backend-config="access_key=${{ secrets.DO_BUCKET_ACCESS_KEY }}" -backend-config="secret_key=${{ secrets.DO_BUCKET_SECRET_KEY }}"
           terraform -chdir="./Infrastructure/digitalocean/infrastructure-live/test-v1/stage1/" plan -var="digital_ocean_api_token=${{ secrets.DO_API_TOKEN }}"
