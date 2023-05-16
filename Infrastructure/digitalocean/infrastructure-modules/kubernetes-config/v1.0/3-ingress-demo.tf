@@ -35,7 +35,7 @@ resource "kubernetes_ingress_v1" "demo-ingress" {
     }
 
     rule {
-      host = "${service1-subdomain}.${var.domain}"
+      host = "${var.service1-subdomain}.${var.domain}"
 
       http {
         path {
