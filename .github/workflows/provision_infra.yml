@@ -16,10 +16,10 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Provision infra
-        with:
-          do_token: ${{secrets.DO_API_TOKEN }}
-          do_bucket_key: ${{ secrets.DO_BUCKET_ACCESS_KEY }}
-          do_bucket_secret: ${{ secrets.DO_BUCKET_SECRET_KEY }}
+        env:
+          DO_API_TOKEN: ${{secrets.DO_API_TOKEN }}
+          DO_BUCKET_ACCESS_KEY: ${{ secrets.DO_BUCKET_ACCESS_KEY }}
+          DO_BUCKET_SECRET_KEY: ${{ secrets.DO_BUCKET_SECRET_KEY }}
         run: |
           terraform --version
           terraform -chdir="./Infrastructure/digitalocean/infrastructure-live/test-v1/stage1/" init -var="digital_ocean_api_token=${{ secrets.DO_API_TOKEN }} -backend-config="access_key=${{ secrets.DO_BUCKET_ACCESS_KEY }}" -backend-config="secret_key=${{ secrets.DO_BUCKET_SECRET_KEY }}"
