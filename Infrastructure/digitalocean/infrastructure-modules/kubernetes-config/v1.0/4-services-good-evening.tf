@@ -33,7 +33,7 @@ spec:
   selector:
     matchLabels:
       app: goodevening
-  replicas: 1
+  replicas: 2
   template:
     metadata:
       labels:

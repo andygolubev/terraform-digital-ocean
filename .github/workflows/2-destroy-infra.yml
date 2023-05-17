@@ -1,4 +1,4 @@
-name: 2-Destroy
+name: 2-Destroy-infrastructure
 
 on:
   workflow_dispatch:

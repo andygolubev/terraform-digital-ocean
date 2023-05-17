@@ -33,7 +33,7 @@ spec:
   selector:
     matchLabels:
       app: pagenotfound
-  replicas: 1
+  replicas: 2
   template:
     metadata:
       labels:

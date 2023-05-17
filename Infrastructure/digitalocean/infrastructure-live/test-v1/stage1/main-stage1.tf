@@ -63,12 +63,12 @@ module "kubernetes-provision" {
     #       "s-4vcpu-8gb"
 
     # Mandatory pool that must exist
-    k8s_embedded_pool_size = "s-2vcpu-4gb" #Edit
+    k8s_embedded_pool_size = "s-4vcpu-8gb" #Edit
     k8s_embedded_pool_nodes_count = 1 #Edit
 
     # Type "true" if you want this pool of nodes
     pool_1_enabled = true #Edit
-    k8s_pool_1_size = "s-2vcpu-4gb" #Edit
+    k8s_pool_1_size = "s-4vcpu-8gb" #Edit
     k8s_pool_1_nodes_count = 1 #Edit
 
     # Type "true" if you want this pool of nodes
