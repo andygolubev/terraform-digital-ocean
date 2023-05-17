@@ -18,19 +18,14 @@ terraform {
   }
 }
 
-
-# Configure the DigitalOcean Provider
 variable "digital_ocean_api_token" {
   description = "Digital Ocean token"
   type        = string
 }
+
 provider "digitalocean" {
   token = var.digital_ocean_api_token
 }
-
-#
-# RESOURCES
-#
 
 variable "user_defined_tags" {
   description = "Tags for resources"
@@ -38,17 +33,11 @@ variable "user_defined_tags" {
   default     = [ "Created-by-terraform", "test-env", "test-account" ] #Edit
 }
 
-resource "time_sleep" "wait_time_before_destroy_resource" {
-  destroy_duration = "60s"
-}
-
 resource "digitalocean_project" "this" {
   name        = "infra-demo-v1" #Edit
   description = "infra-demo-v1" #Edit
   purpose     = "Web Application"
   environment = "Development"
-
-  depends_on = [ time_sleep.wait_time_before_destroy_resource, ]
 }
 
 module "vpc" {
@@ -57,9 +46,6 @@ module "vpc" {
   vpc_name             = "vpc-test" #Edit
   vpc_cidr_block       = "10.0.0.0/24"
   digitalocean_region  = "fra1"
-
-  depends_on = [ time_sleep.wait_time_before_destroy_resource, ]
-  
 }
 
 module "kubernetes-provision" {

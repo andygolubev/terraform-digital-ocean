@@ -51,9 +51,9 @@ module "kubernetes-config" {
 
 
   domain = "kuber.work"
-  service1-subdomain = "service1-test"
-  service2-subdomain = "service2-test"
-  service3-subdomain = "service3-test"
+  service1-subdomain = "service-1-test-morning"
+  service2-subdomain = "service-2-test-afternoon"
+  service3-subdomain = "service-3-test-evening"
   lb-workaround-subdomain = "lb-workaround-test"
   service1-service = "goodmorning" 
   service2-service = "goodafternoon" 
