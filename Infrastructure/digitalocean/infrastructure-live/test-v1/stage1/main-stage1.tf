@@ -32,19 +32,23 @@ provider "digitalocean" {
 # RESOURCES
 #
 
+variable "user_defined_tags" {
+  description = "Tags for resources"
+  type        = list(string)
+  default     = [ "Created-by-terraform", "test-env", "test-account" ] #Edit
+}
+
+resource "time_sleep" "wait_time_before_destroy_resource" {
+  destroy_duration = "60s"
+}
+
 resource "digitalocean_project" "this" {
   name        = "infra-demo-v1" #Edit
   description = "infra-demo-v1" #Edit
   purpose     = "Web Application"
   environment = "Development"
 
-  depends_on = [ module.vpc, ]
-}
-
-variable "user_defined_tags" {
-  description = "Tags for resources"
-  type        = list(string)
-  default     = [ "Created-by-terraform", "test-env", "test-account" ] #Edit
+  depends_on = [ time_sleep.time_sleep.wait_time_before_destroy_resource ]
 }
 
 module "vpc" {
@@ -53,6 +57,8 @@ module "vpc" {
   vpc_name             = "vpc-test" #Edit
   vpc_cidr_block       = "10.0.0.0/24"
   digitalocean_region  = "fra1"
+
+  depends_on = [ time_sleep.time_sleep.wait_time_before_destroy_resource ]
   
 }
 
