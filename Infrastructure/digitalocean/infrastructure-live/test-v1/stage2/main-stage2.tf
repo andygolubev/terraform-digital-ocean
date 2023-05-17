@@ -59,5 +59,6 @@ module "kubernetes-config" {
   service2-service = "goodafternoon" 
   service3-service = "goodevening" 
   cluster-issuer = "letsencrypt-prod" # letsencrypt-prod or letsencrypt-staging
+  ssl-redirect = "false"
 
 }

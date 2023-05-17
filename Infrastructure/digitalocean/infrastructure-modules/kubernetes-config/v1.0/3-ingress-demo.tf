@@ -20,6 +20,7 @@ resource "kubernetes_ingress_v1" "demo-ingress" {
     annotations = {
       "cert-manager.io/cluster-issuer" = "${var.cluster-issuer}"
       "kubernetes.io/ingress.class"   = "nginx"
+      "nginx.ingress.kubernetes.io/ssl-redirect" = "${var.ssl-redirect}"
     }
   }
 

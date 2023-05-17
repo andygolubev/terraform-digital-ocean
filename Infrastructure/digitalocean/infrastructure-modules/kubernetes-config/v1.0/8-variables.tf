@@ -50,5 +50,10 @@ variable "cluster-issuer" {
   default = "letsencrypt-staging"
 }
 
+variable "ssl-redirect" {
+  description = "ssl-redirect"
+  type = string
+  default = "false"
+}
 
 
