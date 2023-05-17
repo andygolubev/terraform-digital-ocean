@@ -10,14 +10,20 @@ env:
 jobs:
   destroy:
     name: Destroy the infrastructure in Digital Ocean
-    runs-on: self-hosted
+    #runs-on: self-hosted
+    runs-on: ubuntu-latest
     steps:
+      - name: Install doctl
+        uses: digitalocean/action-doctl@v2
+        with:
+          token: ${{ secrets.DO_API_TOKEN }}
+
       - name: Checkout
         uses: actions/checkout@v3
 
       - name: Destroy the infrastructure
         env:
-          DO_API_TOKEN: ${{secrets.DO_API_TOKEN }}
+          DO_API_TOKEN: ${{ secrets.DO_API_TOKEN }}
           DO_BUCKET_ACCESS_KEY: ${{ secrets.DO_BUCKET_ACCESS_KEY }}
           DO_BUCKET_SECRET_KEY: ${{ secrets.DO_BUCKET_SECRET_KEY }}
         run: |
@@ -31,7 +37,7 @@ jobs:
       # - name: Clean up
       #   if: always()
       #   env:
-      #     DO_API_TOKEN: ${{secrets.DO_API_TOKEN }}
+      #     DO_API_TOKEN: ${{ secrets.DO_API_TOKEN }}
       #     DO_BUCKET_ACCESS_KEY: ${{ secrets.DO_BUCKET_ACCESS_KEY }}
       #     DO_BUCKET_SECRET_KEY: ${{ secrets.DO_BUCKET_SECRET_KEY }}
       #   run: |

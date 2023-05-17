@@ -13,8 +13,13 @@ env:
 jobs:
   provision:
     name: Provision the infrastructure in Digital Ocean and configure Kubernetes
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     steps:
+      - name: Install doctl
+        uses: digitalocean/action-doctl@v2
+        with:
+          token: ${{ secrets.DO_API_TOKEN }}
+
       - name: Checkout
         uses: actions/checkout@v3
 
