@@ -48,7 +48,7 @@ resource "digitalocean_project" "this" {
   purpose     = "Web Application"
   environment = "Development"
 
-  depends_on = [ time_sleep.time_sleep.wait_time_before_destroy_resource, ]
+  depends_on = [ time_sleep.wait_time_before_destroy_resource, ]
 }
 
 module "vpc" {
@@ -58,7 +58,7 @@ module "vpc" {
   vpc_cidr_block       = "10.0.0.0/24"
   digitalocean_region  = "fra1"
 
-  depends_on = [ time_sleep.time_sleep.wait_time_before_destroy_resource, ]
+  depends_on = [ time_sleep.wait_time_before_destroy_resource, ]
   
 }
 
