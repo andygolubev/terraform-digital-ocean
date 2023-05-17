@@ -37,6 +37,8 @@ resource "digitalocean_project" "this" {
   description = "infra-demo-v1" #Edit
   purpose     = "Web Application"
   environment = "Development"
+
+  depends_on = [ module.vpc, ]
 }
 
 variable "user_defined_tags" {
